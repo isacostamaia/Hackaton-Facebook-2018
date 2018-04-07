@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "535947578328-8at14hadq1pi2fa3uvsuvlbeucha7l3u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.hackaton.vemcomigo",
+            "certificate_hash": "f9d483f30d201d1015b530d3039300ec597bdc83"
+          }
+        },
+        {
           "client_id": "535947578328-1s8q0mbqv750p45pngi4o5ck87rf1id8.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,20 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "535947578328-1s8q0mbqv750p45pngi4o5ck87rf1id8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "535947578328-blbdtpgl08ta585g36dfr37h9itl2kut.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "vamosjuntas.FirebaseDatabase"
+              }
+            }
+          ]
         },
         "ads_service": {
           "status": 2

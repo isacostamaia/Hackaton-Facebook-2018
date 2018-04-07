@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.ProfileManager;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -33,6 +35,13 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(layout.activity_login);
         ButterKnife.bind(this);
 
+        boolean loggedIn = AccessToken.getCurrentAccessToken() != null;
+
+        if (loggedIn) {
+            Intent intent = new Intent(this, StartPin.class);
+            startActivity(intent);
+        }
+
         loginButton.setReadPermissions(Arrays.asList(EMAIL));
         callbackManager = CallbackManager.Factory.create();
 
@@ -47,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         return new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Intent intent = new Intent(activity, MainActivity.class);
+                Intent intent = new Intent(activity, StartPin.class);
                 activity.startActivity(intent);
             }
 

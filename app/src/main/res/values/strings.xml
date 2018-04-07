@@ -2,4 +2,5 @@
     <string name="app_name">VemComigo</string>
     <string name="facebook_app_id">424381574651247</string>
     <string name="fb_login_protocol_scheme">fb424381574651247</string>
+    <string name="title_activity_start_pin">Map</string>
 </resources>

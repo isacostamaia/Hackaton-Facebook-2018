@@ -48,7 +48,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(layout.activity_login);
         ButterKnife.bind(this);
 
-        checkRide();
+        if (Profile.getCurrentProfile() != null) {
+            checkRide();
+        }
 
         loginButton.setReadPermissions(Arrays.asList("public_profile"));
 

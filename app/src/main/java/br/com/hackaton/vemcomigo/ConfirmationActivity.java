@@ -16,7 +16,7 @@ public class ConfirmationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirmation);
 
-
+        setTitle("Você vai com Gabriela");
 
     }
 }

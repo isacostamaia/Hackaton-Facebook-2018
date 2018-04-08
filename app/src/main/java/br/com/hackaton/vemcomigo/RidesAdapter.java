@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.facebook.Profile;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -109,6 +111,8 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         selectedRide = rides.get(position);
+                        selectedRide.company= Profile.getCurrentProfile().getFirstName();
+                        selectedRide.saveRideToDatabase();
                         Intent confirmationIntent = new Intent(context, ConfirmationActivity.class);
                         context.startActivity(confirmationIntent);
                     }

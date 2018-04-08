@@ -14,6 +14,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.facebook.AccessToken;
 import com.facebook.Profile;
@@ -41,12 +43,19 @@ public class StartPinActivity extends AppCompatActivity implements OnMapReadyCal
     @BindView(R.id.send_location)
     Button sendLocationButton;
 
+    @BindView(R.id.seekBarMaxDistance)
+    SeekBar seekBarMaxDistance;
+
+    @BindView(R.id.textViewMaxDistance)
+    TextView textViewMaxDistance;
+
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private GoogleMap mMap;
     private LocationManager mLocationManager;
     private static final int MY_PERMISSIONS_FINE_LOCATION=1;
     private LatLng startPoint;
     private LatLng endPoint;
+
 
 
     public void getCurrentLocation (){
@@ -67,12 +76,37 @@ public class StartPinActivity extends AppCompatActivity implements OnMapReadyCal
 
         final Profile profile = Profile.getCurrentProfile();
 
+        textViewMaxDistance.setText("10m");
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         mLocationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
         final Activity activity = this;
+
+        seekBarMaxDistance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+        {
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar)
+            {
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar)
+            {
+            }
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress,
+                                          boolean fromUser)
+            {
+                //---change the font size of the EditText---
+
+                textViewMaxDistance.setText(String.valueOf(progress)+"m");
+            }
+        });
+
+
+
         sendLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,6 +116,7 @@ public class StartPinActivity extends AppCompatActivity implements OnMapReadyCal
                     Intent mainIntent = new Intent(activity, MainActivity.class);
 
                     mainIntent.putExtra("currentRide", ride.getAsJson());
+                    mainIntent.putExtra("maxDistance", seekBarMaxDistance.getProgress());
                     activity.startActivity(mainIntent);
                 }
 

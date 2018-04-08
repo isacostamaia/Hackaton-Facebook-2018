@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Adapter;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.facebook.AccessToken;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
             JsonObject rideJsonObject = parser.parse(json).getAsJsonObject();
             this.currentRide = Ride.createFromJson(rideJsonObject);
         }
+        final float maxDistance = (float)intent.getExtras().getInt("maxDistance");
 
         ridesList.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
@@ -94,8 +96,9 @@ public class MainActivity extends AppCompatActivity {
 
                                 String loggedUserId = profile.getFirstName();
                                 String userId = (String) data.get("userId");
+                                float distance = currentRide.getEndDistance(new Ride(userId,startPoint,endPoint));
 
-                                if (!loggedUserId.equals(userId) && startPoint.getLatitude() != null && endPoint.getLatitude() != null) {
+                                if (!loggedUserId.equals(userId) && startPoint.getLatitude() != null && endPoint.getLatitude() != null && distance<=maxDistance) {
                                     rides.add(new Ride(userId, startPoint, endPoint));
                                 }
 

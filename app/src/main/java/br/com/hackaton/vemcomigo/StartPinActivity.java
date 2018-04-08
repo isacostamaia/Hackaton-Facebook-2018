@@ -77,7 +77,10 @@ public class StartPinActivity extends AppCompatActivity implements OnMapReadyCal
             @Override
             public void onClick(View v) {
                 if (endPoint!=null && startPoint!=null) {
-                    Ride ride = new Ride(profile.getFirstName(), Coordinate.fromLatLng(startPoint), Coordinate.fromLatLng(endPoint));
+                    Ride ride = new Ride(profile.getFirstName(),
+                            Coordinate.fromLatLng(startPoint),
+                            Coordinate.fromLatLng(endPoint),
+                            "");
                     ride.saveRideToDatabase();
                     Intent mainIntent = new Intent(activity, MainActivity.class);
 

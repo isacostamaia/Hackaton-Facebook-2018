@@ -27,8 +27,6 @@ public class LoginActivity extends AppCompatActivity {
 
     CallbackManager callbackManager;
 
-    private static final String EMAIL = "email";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-        loginButton.setReadPermissions(Arrays.asList(EMAIL));
+        loginButton.setReadPermissions(Arrays.asList("public_profile", "user_friends"));
         callbackManager = CallbackManager.Factory.create();
 
         loginButton.registerCallback(callbackManager, getCallbackForLogin());

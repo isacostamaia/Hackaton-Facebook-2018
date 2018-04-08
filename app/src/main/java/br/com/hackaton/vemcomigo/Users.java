@@ -24,19 +24,19 @@ public class Users {
     private String curso;
     private int commonFriends;
 
-    public Users(String userId, String curso, int commonFriends) {
+    public Users(String userId, String curso) {
         this.userId=userId;
         this.curso=curso;
-        this.commonFriends=commonFriends;
+        this.commonFriends = (int) (Math.random()*100);
     }
 
 
     public static List<Users> getUsersList() {
         List<Users> usersList = new ArrayList<>();
-        usersList.add(new Users("Cynthia", "Engenharia Elétrica - Unicamp", 25));
-        usersList.add(new Users("Gabriela", "Ciência da Computação - Unicamp", 81));
-        usersList.add(new Users("Junior", "Ciência e Tecnologia - UFABC", 10));
-        usersList.add(new Users("Isabella", "Engenharia Mecatrônica - USP", 8));
+        usersList.add(new Users("Cynthia", "Engenharia Elétrica - Unicamp"));
+        usersList.add(new Users("Gabriela", "Ciência da Computação - Unicamp"));
+        usersList.add(new Users("Junior", "Ciência e Tecnologia - UFABC"));
+        usersList.add(new Users("Isabella", "Engenharia Mecatrônica - USP"));
         return usersList;
     }
 }

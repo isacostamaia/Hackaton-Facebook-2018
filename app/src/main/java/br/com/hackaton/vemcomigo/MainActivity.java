@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
 
                             }
+
                             mAdapter.setRides(rides);
                             mAdapter.notifyDataSetChanged();
                         } else {

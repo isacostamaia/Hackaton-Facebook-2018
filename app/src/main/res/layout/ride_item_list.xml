@@ -10,12 +10,33 @@
         android:layout_margin="8dp"
         android:elevation="2dp">
 
-        <TextView
-            android:id="@+id/rider_name"
+        <LinearLayout
+            android:orientation="vertical"
             android:padding="16dp"
-            android:textSize="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/rider_name"
+
+                android:textSize="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/mutual_friends"
+                android:textSize="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/education"
+                android:textSize="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
     </android.support.v7.widget.CardView>
 

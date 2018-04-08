@@ -22,11 +22,18 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
     private Ride currentRide;
     private Ride selectedRide;
     private Context context;
+    List<Users> list =  Users.getUsersList();
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.rider_name)
         public TextView mTextView;
+
+        @BindView(R.id.mutual_friends)
+        public TextView mutualFriends;
+
+        @BindView(R.id.education)
+        public TextView education;
 
         private View itemView;
         private View.OnClickListener onClickListener;
@@ -62,12 +69,28 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull RidesAdapter.ViewHolder holder, int position) {
 
-                holder.mTextView.setText(rides.get(position).getUserId()+" vai para um local a "+
-                        String.valueOf(currentRide.getEndDistance(rides.get(position)))+
+        Users user = getUserInfo(position);
+
+        String distanceStr = String.valueOf( (int) currentRide.getEndDistance(rides.get(position)));
+        holder.mTextView.setText(rides.get(position).getUserId()+" vai para um local a "+ distanceStr +
                 " metros do seu local de destino. ");
 
-                holder.setOnClickListener(getOnClickListener(position));
+        holder.mutualFriends.setText(user.getCommonFriends() + " amigos em comum");
 
+        holder.education.setText("Estuda " + user.getCurso());
+
+        holder.setOnClickListener(getOnClickListener(position));
+
+    }
+
+    private Users getUserInfo(int position) {
+        for (Users user : list) {
+            if (user.getUserId().equals(rides.get(position).getUserId())) {
+                return user;
+            }
+
+        }
+        return list.get(0);
     }
 
     @NonNull

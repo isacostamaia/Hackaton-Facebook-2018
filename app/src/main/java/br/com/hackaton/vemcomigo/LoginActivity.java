@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         boolean loggedIn = AccessToken.getCurrentAccessToken() != null;
 
         if (loggedIn) {
-            Intent intent = new Intent(this, StartPin.class);
+            Intent intent = new Intent(this, StartPinActivity.class);
             startActivity(intent);
         }
 
@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         return new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Intent intent = new Intent(activity, StartPin.class);
+                Intent intent = new Intent(activity, StartPinActivity.class);
                 activity.startActivity(intent);
             }
 

@@ -18,7 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -61,8 +61,9 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".StartPin"
-            android:label="@string/title_activity_start_pin"></activity>
+            android:name=".StartPinActivity"
+            android:label="@string/title_activity_start_pin" />
+        <activity android:name=".ConfirmationActivity"></activity>
     </application>
 
 </manifest>

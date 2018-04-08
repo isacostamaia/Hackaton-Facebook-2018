@@ -1,5 +1,7 @@
 package br.com.hackaton.vemcomigo;
 
+import android.content.Context;
+import android.content.Intent;
 import android.icu.text.StringSearch;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -18,22 +20,34 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
 
     private List<Ride> rides;
     private Ride currentRide;
+    private Ride selectedRide;
+    private Context context;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.rider_name)
         public TextView mTextView;
 
+        private View itemView;
+        private View.OnClickListener onClickListener;
+
         public ViewHolder(View itemView) {
             super(itemView);
+            this.itemView = itemView;
             ButterKnife.bind(this, itemView);
+        }
+
+        public void setOnClickListener(View.OnClickListener onClickListener) {
+            this.onClickListener = onClickListener;
+            itemView.setOnClickListener(onClickListener);
         }
     }
 
 
-    public RidesAdapter(List<Ride> rides, Ride currentRide) {
+    public RidesAdapter(Context context, List<Ride> rides, Ride currentRide) {
         this.rides = rides;
         this.currentRide = currentRide;
+        this.context = context;
     }
 
     @NonNull
@@ -52,9 +66,23 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
                 holder.mTextView.setText(rides.get(position).getUserId()+" vai para um local a "+
                         String.valueOf(currentRide.getEndDistance(rides.get(position)))+
                 " metros do seu local de destino. ");
+
+                holder.setOnClickListener(getOnClickListener(position));
             }
         }
 
+    }
+
+    @NonNull
+    private View.OnClickListener getOnClickListener(final int position) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedRide = rides.get(position);
+                Intent confirmationIntent = new Intent(context, ConfirmationActivity.class);
+                context.startActivity(confirmationIntent);
+            }
+        };
     }
 
     @Override

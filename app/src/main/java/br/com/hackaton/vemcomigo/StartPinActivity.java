@@ -35,7 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class StartPin extends FragmentActivity implements OnMapReadyCallback {
+public class StartPinActivity extends FragmentActivity implements OnMapReadyCallback {
 
     @BindView(R.id.send_location)
     Button sendLocationButton;

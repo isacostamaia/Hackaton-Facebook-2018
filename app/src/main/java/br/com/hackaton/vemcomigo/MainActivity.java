@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         ridesList.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        mAdapter = new RidesAdapter(rides, currentRide);
+        mAdapter = new RidesAdapter(this, rides, currentRide);
         ridesList.setAdapter(mAdapter);
 
 

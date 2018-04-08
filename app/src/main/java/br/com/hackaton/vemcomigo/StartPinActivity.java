@@ -11,10 +11,12 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
 import com.facebook.AccessToken;
+import com.facebook.Profile;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,7 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class StartPin extends FragmentActivity implements OnMapReadyCallback {
+public class StartPinActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     @BindView(R.id.send_location)
     Button sendLocationButton;
@@ -56,10 +58,13 @@ public class StartPin extends FragmentActivity implements OnMapReadyCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_pin);
         ButterKnife.bind(this);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
+        setTitle("Aonde você vai?");
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -70,9 +75,14 @@ public class StartPin extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 if (endPoint!=null && startPoint!=null) {
-                    Ride ride = new Ride(AccessToken.getCurrentAccessToken().getUserId(), Coordinate.fromLatLng(startPoint), Coordinate.fromLatLng(endPoint));
+                    Ride ride = new Ride(Profile.getCurrentProfile().getFirstName(),
+                            Coordinate.fromLatLng(startPoint),
+                            Coordinate.fromLatLng(endPoint),
+                            "");
                     ride.saveRideToDatabase();
                     Intent mainIntent = new Intent(activity, MainActivity.class);
+
+                    mainIntent.putExtra("currentRide", ride.getAsJson());
                     activity.startActivity(mainIntent);
                 }
 
@@ -80,6 +90,27 @@ public class StartPin extends FragmentActivity implements OnMapReadyCallback {
         });
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_FINE_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    mMap.setMyLocationEnabled(true);
+                    getCurrentLocation();
+
+                }
+                return;
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {

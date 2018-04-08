@@ -70,8 +70,6 @@ public class MainActivity extends AppCompatActivity {
         mAdapter = new RidesAdapter(this, rides, currentRide);
         ridesList.setAdapter(mAdapter);
 
-
-
         final Profile profile = Profile.getCurrentProfile();
         if (profile != null) {
             saudationTextView.setText("Olá, " + profile.getFirstName()+"! Escolha a sua companhia na lista abaixo");

@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         final Profile profile = Profile.getCurrentProfile();
         if (profile != null) {
-            saudationTextView.setText("Olá, " + profile.getFirstName());
+            saudationTextView.setText("Olá, " + profile.getFirstName()+"! Escolha a sua companhia na lista abaixo");
         }
 
         db.collection("rides")

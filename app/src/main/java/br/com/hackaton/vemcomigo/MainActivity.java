@@ -2,11 +2,14 @@ package br.com.hackaton.vemcomigo;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.widget.Adapter;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -29,89 +32,153 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+public class MainActivity extends AppCompatActivity implements
+        GestureDetector.OnGestureListener,
+        GestureDetector.OnDoubleTapListener{
 
-    @BindView(R.id.saudation)
-    TextView saudationTextView;
+        private static final String DEBUG_TAG = "Gestures";
+        private GestureDetectorCompat mDetector;
 
-    @BindView(R.id.rides_list)
-    RecyclerView ridesList;
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    private List<Ride> rides = new ArrayList<>();
-    private RidesAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private Ride currentRide;
+        @BindView(R.id.saudation)
+        TextView saudationTextView;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        @BindView(R.id.rides_list)
+        RecyclerView ridesList;
 
-        setTitle("Quem pode te acompanhar");
+        private List<Ride> rides = new ArrayList<>();
+        private RidesAdapter mAdapter;
+        private RecyclerView.LayoutManager mLayoutManager;
+        private Ride currentRide;
 
-        Intent intent = getIntent();
-        if (intent != null && intent.getStringExtra("currentRide") != null) {
-            String json = intent.getStringExtra("currentRide");
-            JsonParser parser = new JsonParser();
-            JsonObject rideJsonObject = parser.parse(json).getAsJsonObject();
-            this.currentRide = Ride.createFromJson(rideJsonObject);
-        }
-        final float maxDistance = (float)intent.getExtras().getInt("maxDistance");
-
-        ridesList.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        ridesList.setLayoutManager(mLayoutManager);
-
-        // specify an adapter (see also next example)
-        mAdapter = new RidesAdapter(this, rides, currentRide);
-        ridesList.setAdapter(mAdapter);
+        // Called when the activity is first created.
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main);
+            ButterKnife.bind(this);
+            // Instantiate the gesture detector with the
+            // application context and an implementation of
+            // GestureDetector.OnGestureListener
+            mDetector = new GestureDetectorCompat(this, this);
+            // Set the gesture detector as the double tap
+            // listener.
+            mDetector.setOnDoubleTapListener(this);
 
 
+            setTitle("Quem pode te acompanhar");
 
-        final Profile profile = Profile.getCurrentProfile();
-        if (profile != null) {
-            saudationTextView.setText("Olá, " + profile.getFirstName()+"! Escolha a sua companhia na lista abaixo");
-        }
+            Intent intent = getIntent();
+            if (intent != null && intent.getStringExtra("currentRide") != null) {
+                String json = intent.getStringExtra("currentRide");
+                JsonParser parser = new JsonParser();
+                JsonObject rideJsonObject = parser.parse(json).getAsJsonObject();
+                this.currentRide = Ride.createFromJson(rideJsonObject);
+            }
 
-        db.collection("rides")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            List<Ride> rides = new ArrayList<>();
-                            Gson gson = new Gson();
+            final float maxDistance = (float)intent.getExtras().getInt("maxDistance");
 
-                            for (DocumentSnapshot document : task.getResult()) {
+            ridesList.setHasFixedSize(true);
+            mLayoutManager = new LinearLayoutManager(this);
+            ridesList.setLayoutManager(mLayoutManager);
 
-                                Map<String, Object> data = document.getData();
-                                Coordinate startPoint = gson.fromJson((String) data.get("startPoint"), Coordinate.class);
-                                Coordinate endPoint = gson.fromJson((String) data.get("endPoint"), Coordinate.class);
+            // specify an adapter (see also next example)
+            mAdapter = new RidesAdapter(this, rides, currentRide);
+            ridesList.setAdapter(mAdapter);
 
-                                String loggedUserId = profile.getFirstName();
-                                String userId = (String) data.get("userId");
-                                float distance = currentRide.getEndDistance(new Ride(userId,startPoint,endPoint));
 
-                                if (!loggedUserId.equals(userId) && startPoint.getLatitude() != null && endPoint.getLatitude() != null && distance<=maxDistance) {
-                                    rides.add(new Ride(userId, startPoint, endPoint));
+            final Profile profile = Profile.getCurrentProfile();
+            if (profile != null) {
+                saudationTextView.setText("Olá, " + profile.getFirstName() + "! Escolha a sua companhia na lista abaixo");
+            }
+
+            db.collection("rides")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                List<Ride> rides = new ArrayList<>();
+                                Gson gson = new Gson();
+
+                                for (DocumentSnapshot document : task.getResult()) {
+
+                                    Map<String, Object> data = document.getData();
+                                    Coordinate startPoint = gson.fromJson((String) data.get("startPoint"), Coordinate.class);
+                                    Coordinate endPoint = gson.fromJson((String) data.get("endPoint"), Coordinate.class);
+                                    String company = (String) data.get("company");
+
+                                    String userId = (String) data.get("userId");
+                                    String loggedUserId = profile.getFirstName();
+                                    float distance = currentRide.getEndDistance(new Ride(userId,startPoint,endPoint,company));
+
+
+                                    if (!loggedUserId.equals(userId) && startPoint.getLatitude() != null && endPoint.getLatitude() != null && distance<=maxDistance) {
+                                        rides.add(new Ride(userId, startPoint, endPoint, company));
+                                    }
+
                                 }
 
+                                mAdapter.setRides(rides);
+                                mAdapter.notifyDataSetChanged();
+                            } else {
+                                Log.w("DB", "Error getting documents.", task.getException());
                             }
-
-                            mAdapter.setRides(rides);
-                            mAdapter.notifyDataSetChanged();
-                        } else {
-                            Log.w("DB", "Error getting documents.", task.getException());
                         }
-            }
-        });
+                    });
 
-    }
+        }
+
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            return false;
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+
+            return false;
+        }
+
+        @Override
+        public boolean onDoubleTapEvent(MotionEvent e) {
+            return false;
+        }
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return false;
+        }
+
+        @Override
+        public void onShowPress(MotionEvent e) {
+
+        }
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            return false;
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            return false;
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            return false;
+        }
 }
 

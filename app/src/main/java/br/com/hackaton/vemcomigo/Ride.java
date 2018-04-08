@@ -32,12 +32,24 @@ public class Ride {
     @SerializedName("endPoint")
     Coordinate endPoint;
 
+    @SerializedName("photo")
+    String photoUrl;
+
+    @SerializedName("company")
+    String company;
+
+
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public Ride(String userId, Coordinate startPoint, Coordinate endPoint){
+    public Ride(String userId, Coordinate startPoint, Coordinate endPoint, String company){
         this.userId=userId;
         this.startPoint = startPoint;
         this.endPoint = endPoint;
+        this.company = company;
+    }
+
+    public String getCompany() {
+        return company;
     }
 
     public String getUserId() {
@@ -74,7 +86,7 @@ public class Ride {
         newRide.put("startPoint", gson.toJson(this.getStartPoint()));
         newRide.put("endPoint", gson.toJson(this.getEndPoint()));
         newRide.put("userId", this.getUserId());
-
+        newRide.put("company", this.getCompany());
         return gson.toJson(newRide);
     }
 
@@ -84,7 +96,9 @@ public class Ride {
         JsonObject endPointJson = parser.parse(json.get("endPoint").getAsString()).getAsJsonObject();
         Coordinate startPoint = new Coordinate(startPointJson.get("latitude").getAsString(), startPointJson.get("longitude").getAsString());
         Coordinate endPoint = new Coordinate(endPointJson.get("latitude").getAsString(), endPointJson.get("longitude").getAsString());
-        return new Ride(json.get("userId").getAsString(), startPoint, endPoint);
+        return new Ride(json.get("userId").getAsString(),
+                startPoint, endPoint,
+                json.get("company").getAsString());
 
     }
 
@@ -94,6 +108,7 @@ public class Ride {
         newRide.put("startPoint", gson.toJson(this.getStartPoint()));
         newRide.put("endPoint", gson.toJson(this.getEndPoint()));
         newRide.put("userId", this.getUserId());
+        newRide.put("company", this.getCompany());
 
         db.collection("rides").add(newRide).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override

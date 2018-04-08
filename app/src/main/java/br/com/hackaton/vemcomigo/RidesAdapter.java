@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.facebook.Profile;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -36,6 +38,9 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
 
         @BindView(R.id.education)
         public TextView education;
+
+        @BindView(R.id.distance)
+        public TextView distance;
 
         private View itemView;
         private View.OnClickListener onClickListener;
@@ -74,7 +79,9 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
         Users user = getUserInfo(position);
 
         String distanceStr = String.valueOf( (int) currentRide.getEndDistance(rides.get(position)));
-        holder.mTextView.setText(rides.get(position).getUserId()+" vai para um local a "+ distanceStr +
+        holder.mTextView.setText(rides.get(position).getUserId());
+
+        holder.distance.setText("Vai para um local a "+ distanceStr +
                 " metros do seu local de destino. ");
 
         holder.mutualFriends.setText(user.getCommonFriends() + " amigos em comum");
@@ -109,6 +116,11 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         selectedRide = rides.get(position);
+                        selectedRide.company= Profile.getCurrentProfile().getFirstName();
+                        selectedRide.saveRideToDatabase();
+                        selectedRide.company= selectedRide.getUserId();
+                        selectedRide.userId = Profile.getCurrentProfile().getFirstName();
+                        selectedRide.saveRideToDatabase();
                         Intent confirmationIntent = new Intent(context, ConfirmationActivity.class);
                         context.startActivity(confirmationIntent);
                     }

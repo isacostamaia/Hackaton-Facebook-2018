@@ -10,6 +10,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.annotations.SerializedName;
 
 import java.lang.reflect.Array;
@@ -57,6 +60,33 @@ public class Ride {
         return new LatLng(Double.valueOf(this.endPoint.getLatitude()), Double.valueOf(this.endPoint.getLongitude()));
     }
 
+    public float getStartDistance(Ride ride2) {
+        return this.getStartPoint().getDistance(ride2.getStartPoint());
+    }
+
+    public float getEndDistance(Ride ride2) {
+        return this.getEndPoint().getDistance(ride2.getEndPoint());
+    }
+
+    public String getAsJson() {
+        Gson gson = new Gson();
+        Map<String, Object> newRide = new HashMap<>();
+        newRide.put("startPoint", gson.toJson(this.getStartPoint()));
+        newRide.put("endPoint", gson.toJson(this.getEndPoint()));
+        newRide.put("userId", this.getUserId());
+
+        return gson.toJson(newRide);
+    }
+
+    public static Ride createFromJson(JsonObject json) {
+        JsonParser parser = new JsonParser();
+        JsonObject startPointJson = parser.parse(json.get("startPoint").getAsString()).getAsJsonObject();
+        JsonObject endPointJson = parser.parse(json.get("endPoint").getAsString()).getAsJsonObject();
+        Coordinate startPoint = new Coordinate(startPointJson.get("latitude").getAsString(), startPointJson.get("longitude").getAsString());
+        Coordinate endPoint = new Coordinate(endPointJson.get("latitude").getAsString(), endPointJson.get("longitude").getAsString());
+        return new Ride(json.get("userId").getAsString(), startPoint, endPoint);
+
+    }
 
     public void saveRideToDatabase() {
         Gson gson = new Gson();

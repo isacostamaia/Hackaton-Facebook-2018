@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        Profile profile = Profile.getCurrentProfile();
+        final Profile profile = Profile.getCurrentProfile();
         if (profile != null) {
             saudationTextView.setText("Olá, " + profile.getFirstName());
         }
@@ -90,9 +90,10 @@ public class MainActivity extends AppCompatActivity {
                                 Coordinate startPoint = gson.fromJson((String) data.get("startPoint"), Coordinate.class);
                                 Coordinate endPoint = gson.fromJson((String) data.get("endPoint"), Coordinate.class);
 
-                                String loggedUserId = AccessToken.getCurrentAccessToken().getUserId();
+                                String loggedUserId = profile.getFirstName();
                                 String userId = (String) data.get("userId");
-                                if (!loggedUserId.equals(userId)) {
+
+                                if (!loggedUserId.equals(userId) && startPoint.getLatitude() != null && endPoint.getLatitude() != null) {
                                     rides.add(new Ride(userId, startPoint, endPoint));
                                 }
 

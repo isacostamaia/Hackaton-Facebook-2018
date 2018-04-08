@@ -61,15 +61,12 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull RidesAdapter.ViewHolder holder, int position) {
-        if (rides.get(position).getStartPoint().getLatitude() != null) {
-            if (!rides.get(position).getUserId().equals(currentRide.getUserId())){
+
                 holder.mTextView.setText(rides.get(position).getUserId()+" vai para um local a "+
                         String.valueOf(currentRide.getEndDistance(rides.get(position)))+
                 " metros do seu local de destino. ");
 
                 holder.setOnClickListener(getOnClickListener(position));
-            }
-        }
 
     }
 

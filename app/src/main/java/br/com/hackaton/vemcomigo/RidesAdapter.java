@@ -39,6 +39,9 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
         @BindView(R.id.education)
         public TextView education;
 
+        @BindView(R.id.distance)
+        public TextView distance;
+
         private View itemView;
         private View.OnClickListener onClickListener;
 
@@ -76,7 +79,9 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
         Users user = getUserInfo(position);
 
         String distanceStr = String.valueOf( (int) currentRide.getEndDistance(rides.get(position)));
-        holder.mTextView.setText(rides.get(position).getUserId()+" vai para um local a "+ distanceStr +
+        holder.mTextView.setText(rides.get(position).getUserId());
+
+        holder.distance.setText("Vai para um local a "+ distanceStr +
                 " metros do seu local de destino. ");
 
         holder.mutualFriends.setText(user.getCommonFriends() + " amigos em comum");

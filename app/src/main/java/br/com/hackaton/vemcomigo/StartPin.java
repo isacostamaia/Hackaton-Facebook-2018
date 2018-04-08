@@ -61,6 +61,9 @@ public class StartPin extends FragmentActivity implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_pin);
         ButterKnife.bind(this);
+
+        setTitle("Aonde você vai?");
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
         final Profile profile = Profile.getCurrentProfile();
@@ -87,6 +90,22 @@ public class StartPin extends FragmentActivity implements OnMapReadyCallback {
         });
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_FINE_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    mMap.setMyLocationEnabled(true);
+                    getCurrentLocation();
+
+                }
+                return;
+            }
+        }
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {

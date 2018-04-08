@@ -40,7 +40,8 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-        loginButton.setReadPermissions(Arrays.asList("public_profile", "user_friends"));
+        loginButton.setReadPermissions(Arrays.asList("public_profile"));
+
         callbackManager = CallbackManager.Factory.create();
 
         loginButton.registerCallback(callbackManager, getCallbackForLogin());

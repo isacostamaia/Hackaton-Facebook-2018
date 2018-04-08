@@ -1,6 +1,8 @@
 package br.com.hackaton.vemcomigo;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.icu.text.StringSearch;
 import android.support.annotation.NonNull;
@@ -98,12 +100,31 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedRide = rides.get(position);
-                Intent confirmationIntent = new Intent(context, ConfirmationActivity.class);
-                context.startActivity(confirmationIntent);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+                builder.setMessage(R.string.dialog_message)
+                        .setTitle(R.string.dialog_title);
+
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        selectedRide = rides.get(position);
+                        Intent confirmationIntent = new Intent(context, ConfirmationActivity.class);
+                        context.startActivity(confirmationIntent);
+                    }
+                });
+                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         };
     }
+
 
     @Override
     public int getItemCount() {

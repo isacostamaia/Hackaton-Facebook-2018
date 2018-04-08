@@ -3,4 +3,8 @@
     <string name="facebook_app_id">424381574651247</string>
     <string name="fb_login_protocol_scheme">fb424381574651247</string>
     <string name="title_activity_start_pin">Map</string>
+    <string name="cancel">Cancelar</string>
+    <string name="ok">Sim! :)</string>
+    <string name="dialog_message">Você quer ir com esta pessoa?</string>
+    <string name="dialog_title">Confirmação</string>
 </resources>

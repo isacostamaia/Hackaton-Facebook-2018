@@ -73,6 +73,8 @@ public class StartPin extends FragmentActivity implements OnMapReadyCallback {
                     Ride ride = new Ride(AccessToken.getCurrentAccessToken().getUserId(), Coordinate.fromLatLng(startPoint), Coordinate.fromLatLng(endPoint));
                     ride.saveRideToDatabase();
                     Intent mainIntent = new Intent(activity, MainActivity.class);
+
+                    mainIntent.putExtra("currentRide", ride.getAsJson());
                     activity.startActivity(mainIntent);
                 }
 

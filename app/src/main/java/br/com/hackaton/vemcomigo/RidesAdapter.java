@@ -15,6 +15,7 @@ import butterknife.ButterKnife;
 public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> {
 
     private List<Ride> rides;
+    private Ride currentRide;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -28,8 +29,9 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
     }
 
 
-    public RidesAdapter(List<Ride> rides) {
+    public RidesAdapter(List<Ride> rides, Ride currentRide) {
         this.rides = rides;
+        this.currentRide = currentRide;
     }
 
     @NonNull
@@ -43,7 +45,10 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull RidesAdapter.ViewHolder holder, int position) {
-        holder.mTextView.setText(rides.get(position).getUserId());
+        if (rides.get(position).getStartPoint().getLatitude() != null) {
+            holder.mTextView.setText(String.valueOf(currentRide.getEndDistance(rides.get(position))));
+        }
+
     }
 
     @Override
@@ -53,5 +58,9 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
 
     public void setRides(List<Ride> rides) {
         this.rides = rides;
+    }
+
+    public void setCurrentRide(Ride currentRide) {
+        this.currentRide = currentRide;
     }
 }

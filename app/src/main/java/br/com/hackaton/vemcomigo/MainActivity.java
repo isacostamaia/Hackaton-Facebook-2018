@@ -1,5 +1,6 @@
 package br.com.hackaton.vemcomigo;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +21,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Ride> rides = new ArrayList<>();
     private RidesAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private Ride currentRide;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,18 +52,27 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        Intent intent = getIntent();
+        if (intent != null && intent.getStringExtra("currentRide") != null) {
+            String json = intent.getStringExtra("currentRide");
+            JsonParser parser = new JsonParser();
+            JsonObject rideJsonObject = parser.parse(json).getAsJsonObject();
+            this.currentRide = Ride.createFromJson(rideJsonObject);
+        }
+
         ridesList.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         ridesList.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        mAdapter = new RidesAdapter(rides);
+        mAdapter = new RidesAdapter(rides, currentRide);
         ridesList.setAdapter(mAdapter);
+
 
 
         Profile profile = Profile.getCurrentProfile();
         if (profile != null) {
-            saudationTextView.setText("Olá, " + profile.getFirstName()+ AccessToken.getCurrentAccessToken().getUserId());
+            saudationTextView.setText("Olá, " + profile.getFirstName());
         }
 
         db.collection("rides")

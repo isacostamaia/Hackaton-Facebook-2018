@@ -118,6 +118,9 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
                         selectedRide = rides.get(position);
                         selectedRide.company= Profile.getCurrentProfile().getFirstName();
                         selectedRide.saveRideToDatabase();
+                        selectedRide.company= selectedRide.getUserId();
+                        selectedRide.userId = Profile.getCurrentProfile().getFirstName();
+                        selectedRide.saveRideToDatabase();
                         Intent confirmationIntent = new Intent(context, ConfirmationActivity.class);
                         context.startActivity(confirmationIntent);
                     }

@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ConfirmationActivity extends AppCompatActivity {
 
@@ -24,6 +25,7 @@ public class ConfirmationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirmation);
+        ButterKnife.bind(this);
 
         setTitle("Você vai com Gabriela");
 

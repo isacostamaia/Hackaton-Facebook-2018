@@ -105,6 +105,7 @@ public class LoginActivity extends AppCompatActivity {
                         String userId = (String) data.get("userId");
 
                         if (loggedUserId.equals(userId) && !company.isEmpty()) {
+
                             UserUtils.getInstance().setHasRide(true);
                             handleLogin();
                             Log.w("TEST", "user is" + company);

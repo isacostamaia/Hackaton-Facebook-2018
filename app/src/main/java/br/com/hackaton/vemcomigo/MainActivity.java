@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        setTitle("Quem pode te acompanhar");
+
         Intent intent = getIntent();
         if (intent != null && intent.getStringExtra("currentRide") != null) {
             String json = intent.getStringExtra("currentRide");

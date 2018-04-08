@@ -65,8 +65,6 @@ public class StartPinActivity extends AppCompatActivity implements OnMapReadyCal
 
         setTitle("Aonde você vai?");
 
-        final Profile profile = Profile.getCurrentProfile();
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -77,7 +75,7 @@ public class StartPinActivity extends AppCompatActivity implements OnMapReadyCal
             @Override
             public void onClick(View v) {
                 if (endPoint!=null && startPoint!=null) {
-                    Ride ride = new Ride(profile.getFirstName(),
+                    Ride ride = new Ride(Profile.getCurrentProfile().getFirstName(),
                             Coordinate.fromLatLng(startPoint),
                             Coordinate.fromLatLng(endPoint),
                             "");

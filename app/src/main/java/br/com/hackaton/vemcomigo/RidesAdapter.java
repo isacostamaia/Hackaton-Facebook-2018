@@ -1,5 +1,6 @@
 package br.com.hackaton.vemcomigo;
 
+import android.icu.text.StringSearch;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,7 +21,7 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.ride_name)
+        @BindView(R.id.rider_name)
         public TextView mTextView;
 
         public ViewHolder(View itemView) {
@@ -46,7 +48,11 @@ public class RidesAdapter extends RecyclerView.Adapter<RidesAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull RidesAdapter.ViewHolder holder, int position) {
         if (rides.get(position).getStartPoint().getLatitude() != null) {
-            holder.mTextView.setText(String.valueOf(currentRide.getEndDistance(rides.get(position))));
+            if (!rides.get(position).getUserId().equals(currentRide.getUserId())){
+                holder.mTextView.setText(rides.get(position).getUserId()+" vai para um local a "+
+                        String.valueOf(currentRide.getEndDistance(rides.get(position)))+
+                " metros do seu local de destino. ");
+            }
         }
 
     }

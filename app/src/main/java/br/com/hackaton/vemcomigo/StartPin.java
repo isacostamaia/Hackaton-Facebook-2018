@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.facebook.AccessToken;
+import com.facebook.Profile;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -56,10 +57,14 @@ public class StartPin extends FragmentActivity implements OnMapReadyCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_pin);
         ButterKnife.bind(this);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
+        final Profile profile = Profile.getCurrentProfile();
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -70,7 +75,7 @@ public class StartPin extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 if (endPoint!=null && startPoint!=null) {
-                    Ride ride = new Ride(AccessToken.getCurrentAccessToken().getUserId(), Coordinate.fromLatLng(startPoint), Coordinate.fromLatLng(endPoint));
+                    Ride ride = new Ride(profile.getFirstName(), Coordinate.fromLatLng(startPoint), Coordinate.fromLatLng(endPoint));
                     ride.saveRideToDatabase();
                     Intent mainIntent = new Intent(activity, MainActivity.class);
 

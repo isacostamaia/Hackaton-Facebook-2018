@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        setTitle("Quem pode te acompanhar");
+
         Intent intent = getIntent();
         if (intent != null && intent.getStringExtra("currentRide") != null) {
             String json = intent.getStringExtra("currentRide");
@@ -72,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
         final Profile profile = Profile.getCurrentProfile();
         if (profile != null) {
-            saudationTextView.setText("Olá, " + profile.getFirstName());
+            saudationTextView.setText("Olá, " + profile.getFirstName() + "! Essas pessoas podem ir com você:");
         }
 
         db.collection("rides")

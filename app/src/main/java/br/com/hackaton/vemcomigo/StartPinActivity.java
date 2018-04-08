@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
@@ -35,7 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class StartPinActivity extends FragmentActivity implements OnMapReadyCallback {
+public class StartPinActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     @BindView(R.id.send_location)
     Button sendLocationButton;
@@ -63,8 +64,6 @@ public class StartPinActivity extends FragmentActivity implements OnMapReadyCall
         ButterKnife.bind(this);
 
         setTitle("Aonde você vai?");
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
         final Profile profile = Profile.getCurrentProfile();
 
@@ -105,6 +104,11 @@ public class StartPinActivity extends FragmentActivity implements OnMapReadyCall
                 return;
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
     @Override
